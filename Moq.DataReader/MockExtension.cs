@@ -23,6 +23,9 @@ namespace Moq.DataReader
       mock.Setup(r => r.VisibleFieldCount).Returns(dataInfo.FieldCount);
       mock.Setup(r => r.HasRows).Returns(dataInfo.Data.Count > 0);
 
+      mock.Setup(r => r[It.IsAny<string>()]).Returns((string name) => dataInfo.GetValue<object>(row, dataInfo.GetOrdinal(name)));
+      mock.Setup(r => r[It.IsAny<int>()]).Returns((int ordinal) => dataInfo.GetValue<object>(row, ordinal));
+
       mock.Setup(r => r.NextResult()).Returns(false);
       mock.Setup(r => r.Read())
         .Returns(() => row < dataInfo.Data.Count - 1)
@@ -40,6 +43,7 @@ namespace Moq.DataReader
         mock.Setup(r => r.GetName(i)).Returns<int>(col => dataInfo.GetName(col));
         mock.Setup(r => r.GetFieldType(i)).Returns<int>(col => dataInfo.GetFieldType(col));
         mock.Setup(r => r.GetDataTypeName(i)).Returns<int>(col => dataInfo.GetDataTypeName(col));
+        mock.Setup(r => r.IsDBNull(i)).Returns<int>(col => dataInfo.GetValue<object>(row, col) == null);
         mock.Setup(r => r.GetValue(i)).Returns<int>(col => dataInfo.GetValue<object>(row, col));
         mock.Setup(r => r.GetBoolean(i)).Returns<int>(col => dataInfo.GetValue<bool>(row, col));
         mock.Setup(r => r.GetByte(i)).Returns<int>(col => dataInfo.GetValue<byte>(row, col));

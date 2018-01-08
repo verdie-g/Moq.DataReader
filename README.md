@@ -19,3 +19,5 @@ These methods are not implemented and will return default value:
 - GetColumnSchema
 - GetLifeTimeService
 - GetTextReader
+- IsDbNullAsync
+- ReadAsync

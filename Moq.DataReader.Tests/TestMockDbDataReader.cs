@@ -152,8 +152,8 @@ namespace Moq.DataReader.Tests
           I = r.GetInt32(3),
           L = r.GetInt64(4),
           B = r.GetByte(5),
-          Us = (ushort)r.GetValue(6),
-          Ui = (uint)r.GetValue(7),
+          Us = (ushort)r[6],
+          Ui = (uint)r[nameof(TestModel.Ui)],
           Ul = (ulong)r.GetValue(8),
           F = r.GetFloat(9),
           D = r.GetDouble(10),
@@ -165,6 +165,18 @@ namespace Moq.DataReader.Tests
         };
         TestModelEqual(tm, i);
       }
+    }
+
+    [Fact]
+    public void TestIsDbNull()
+    {
+      DbDataReader r = CreateDataReaderMock(1).Object;
+      Assert.True(r.Read());
+      Assert.True(r.IsDBNull(12));
+      Assert.False(r.IsDBNull(0));
+      Assert.False(r.IsDBNull(1));
+      Assert.False(r.IsDBNull(2));
+      Assert.False(r.IsDBNull(3));
     }
 
     private void TestModelEqual(TestModel tm1, int i)
