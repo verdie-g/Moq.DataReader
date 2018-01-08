@@ -167,6 +167,18 @@ namespace Moq.DataReader.Tests
       }
     }
 
+    [Fact]
+    public void TestIsDbNull()
+    {
+      DbDataReader r = CreateDataReaderMock(1).Object;
+      Assert.True(r.Read());
+      Assert.True(r.IsDBNull(12));
+      Assert.False(r.IsDBNull(0));
+      Assert.False(r.IsDBNull(1));
+      Assert.False(r.IsDBNull(2));
+      Assert.False(r.IsDBNull(3));
+    }
+
     private void TestModelEqual(TestModel tm1, int i)
     {
       TestModel tm2 = _testModelsCollection[i];

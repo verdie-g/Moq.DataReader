@@ -40,6 +40,7 @@ namespace Moq.DataReader
         mock.Setup(r => r.GetName(i)).Returns<int>(col => dataInfo.GetName(col));
         mock.Setup(r => r.GetFieldType(i)).Returns<int>(col => dataInfo.GetFieldType(col));
         mock.Setup(r => r.GetDataTypeName(i)).Returns<int>(col => dataInfo.GetDataTypeName(col));
+        mock.Setup(r => r.IsDBNull(i)).Returns<int>(col => dataInfo.GetValue<object>(row, col) == null);
         mock.Setup(r => r.GetValue(i)).Returns<int>(col => dataInfo.GetValue<object>(row, col));
         mock.Setup(r => r.GetBoolean(i)).Returns<int>(col => dataInfo.GetValue<bool>(row, col));
         mock.Setup(r => r.GetByte(i)).Returns<int>(col => dataInfo.GetValue<byte>(row, col));
