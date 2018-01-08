@@ -3,10 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Grégoire Verdier</Authors>
-    <Company />
-    <Product />
     <Description>Moq extension to mock DbDataReader with a list</Description>
     <PackageLicenseUrl>https://raw.githubusercontent.com/verdie-g/Moq.DataReader/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/verdie-g/Moq.DataReader</PackageProjectUrl>
