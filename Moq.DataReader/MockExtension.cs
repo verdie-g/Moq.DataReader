@@ -23,6 +23,9 @@ namespace Moq.DataReader
       mock.Setup(r => r.VisibleFieldCount).Returns(dataInfo.FieldCount);
       mock.Setup(r => r.HasRows).Returns(dataInfo.Data.Count > 0);
 
+      mock.Setup(r => r[It.IsAny<string>()]).Returns((string name) => dataInfo.GetValue<object>(row, dataInfo.GetOrdinal(name)));
+      mock.Setup(r => r[It.IsAny<int>()]).Returns((int ordinal) => dataInfo.GetValue<object>(row, ordinal));
+
       mock.Setup(r => r.NextResult()).Returns(false);
       mock.Setup(r => r.Read())
         .Returns(() => row < dataInfo.Data.Count - 1)
