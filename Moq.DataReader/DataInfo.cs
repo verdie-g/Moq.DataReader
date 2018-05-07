@@ -8,14 +8,14 @@ namespace Moq.DataReader
 {
   internal class DataInfo<T>
   {
-    public List<T> Data { get; }
+    public IReadOnlyList<T> Data { get; }
     public int FieldCount => _properties.Length;
     public bool Closed { get; set; }
 
-    private PropertyInfo[] _properties;
-    private string[] _fieldNames;
+    private readonly PropertyInfo[] _properties;
+    private readonly string[] _fieldNames;
 
-    public DataInfo(List<T> data, string[] fieldNames)
+    public DataInfo(IReadOnlyList<T> data, string[] fieldNames)
     {
       Data = data;
       Closed = false;

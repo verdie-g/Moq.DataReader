@@ -1,11 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 
 namespace Moq.DataReader
 {
   public static class MockExtension
   {
+    /// <summary>
+    /// Mock a DbDataReader
+    /// </summary>
+    /// <typeparam name="T">Model representing table schema</typeparam>
+    /// <param name="mock"></param>
+    /// <param name="fieldNames">Optional. Column names. Default is <see cref="T"/>'s properties names</param>
+    /// <param name="data">Result set</param>
+    public static void SetupDataReader<T>(this Mock<DbDataReader> mock, string[] fieldNames = null, params T[] data)
+    {
+      SetupDataReader(mock, data, fieldNames);
+    }
+    
+    /// <summary>
+    /// Mock a DbDataReader
+    /// </summary>
+    /// <typeparam name="T">Model representing table schema</typeparam>
+    /// <param name="mock"></param>
+    /// <param name="data">Result set</param>
+    /// <param name="fieldNames">Optional. Column names. Default is <see cref="T"/>'s properties names</param>
+    public static void SetupDataReader<T>(this Mock<DbDataReader> mock, IEnumerable<T> data, string[] fieldNames = null)
+    {
+      var list = data as IReadOnlyList<T> ?? data.ToList();
+      SetupDataReader(mock, list, fieldNames);
+    }
+    
     /// <summary>
     /// Mock a DbDataReader using a list
     /// </summary>
@@ -13,7 +39,7 @@ namespace Moq.DataReader
     /// <param name="mock"></param>
     /// <param name="data">List respresenting a result set</param>
     /// <param name="fieldNames">Optional. Column names. Default is <see cref="T"/>'s properties names</param>
-    public static void SetupDataReader<T>(this Mock<DbDataReader> mock, List<T> data, string[] fieldNames = null)
+    public static void SetupDataReader<T>(this Mock<DbDataReader> mock, IReadOnlyList<T> data, string[] fieldNames = null)
     {
       int row = -1;
 
