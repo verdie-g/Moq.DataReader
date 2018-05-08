@@ -72,7 +72,7 @@ namespace Moq.DataReader.Tests
     public void TestGetNameEmpty()
     {
       DbDataReader r = CreateDataReaderMock().Object;
-      Assert.Throws<IndexOutOfRangeException>(() => r.GetName(0));
+      Assert.Throws<IndexOutOfRangeException>(() => r.GetName(-1));
     }
 
     [Fact]
