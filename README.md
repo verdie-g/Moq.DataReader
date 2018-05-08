@@ -1,11 +1,11 @@
-# DbDataReader extension for Moq
+# IDataReader extension for Moq
 
 ## Usage
 ```csharp
 var data = new List<T>() { ... };
-var mock = new Mock<DbDataReader>();
+var mock = new Mock<IDataReader>();
 mock.SetupDataReader(data);
-DbDataReader r = mock.Object;
+IDataReader r = mock.Object;
 ```
 
 ## Not implemented
@@ -13,11 +13,3 @@ DbDataReader r = mock.Object;
 These methods are not implemented and will return default value:
 - Depth
 - RecordAffected
-- GetFieldValue
-- NextResult
-- CanGetColumnSchema
-- GetColumnSchema
-- GetLifeTimeService
-- GetTextReader
-- IsDbNullAsync
-- ReadAsync

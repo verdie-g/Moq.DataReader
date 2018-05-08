@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
+using System.Data;
 using System.Linq;
 using Xunit;
 
 namespace Moq.DataReader.Tests
 {
-  public class TestMockDbDataReader
+  public class TestMockIDataReader
   {
     private List<TestModel> _testModelsCollection = new List<TestModel>()
     {
@@ -37,7 +37,7 @@ namespace Moq.DataReader.Tests
     [Fact]
     public void TestRead()
     {
-      DbDataReader r = CreateDataReaderMock(0).Object;
+      IDataReader r = CreateDataReaderMock(0).Object;
       Assert.True(r.Read());
       Assert.False(r.Read());
       Assert.False(r.Read());
@@ -46,7 +46,7 @@ namespace Moq.DataReader.Tests
     [Fact]
     public void TestReadEmpty()
     {
-      DbDataReader r = CreateDataReaderMock().Object;
+      IDataReader r = CreateDataReaderMock().Object;
       Assert.False(r.Read());
       Assert.False(r.Read());
     }
@@ -54,14 +54,14 @@ namespace Moq.DataReader.Tests
     [Fact]
     public void TestFieldCount()
     {
-      DbDataReader r = CreateDataReaderMock(0).Object;
+      IDataReader r = CreateDataReaderMock(0).Object;
       Assert.Equal(r.FieldCount, _expectedFieldNames.Length);
     }
 
     [Fact]
     public void TestGetName()
     {
-      DbDataReader r = CreateDataReaderMock(0).Object;
+      IDataReader r = CreateDataReaderMock(0).Object;
       for (int i = 0; i < r.FieldCount; ++i)
       {
         Assert.Equal(r.GetName(i), _expectedFieldNames[i]);
@@ -71,44 +71,30 @@ namespace Moq.DataReader.Tests
     [Fact]
     public void TestGetNameEmpty()
     {
-      DbDataReader r = CreateDataReaderMock().Object;
+      IDataReader r = CreateDataReaderMock().Object;
       Assert.Throws<IndexOutOfRangeException>(() => r.GetName(-1));
     }
 
     [Fact]
     public void TestGetNameOutOfRange()
     {
-      DbDataReader r = CreateDataReaderMock().Object;
+      IDataReader r = CreateDataReaderMock().Object;
       Assert.Throws<IndexOutOfRangeException>(() => r.GetName(30));
     }
 
     [Fact]
     public void TestGetNameAfterReading()
     {
-      DbDataReader r = CreateDataReaderMock(0).Object;
+      IDataReader r = CreateDataReaderMock(0).Object;
       r.Read();
       IEnumerable<string> actualFieldNames = Enumerable.Range(0, r.FieldCount - 1).Select(i => r.GetName(i));
       actualFieldNames.SequenceEqual(_expectedFieldNames);
     }
 
     [Fact]
-    public void TestHasRows()
-    {
-      DbDataReader r = CreateDataReaderMock(0).Object;
-      Assert.True(r.HasRows);
-    }
-
-    [Fact]
-    public void TestHasRowsEmpty()
-    {
-      DbDataReader r = CreateDataReaderMock().Object;
-      Assert.False(r.HasRows);
-    }
-
-    [Fact]
     public void TestGetOrdinal()
     {
-      DbDataReader r = CreateDataReaderMock().Object;
+      IDataReader r = CreateDataReaderMock().Object;
       for (int i = 0; i < r.FieldCount; ++i)
       {
         Assert.Equal(r.GetOrdinal(_expectedFieldNames[i]), i);
@@ -118,7 +104,7 @@ namespace Moq.DataReader.Tests
     [Fact]
     public void TestClose()
     {
-      DbDataReader r = CreateDataReaderMock().Object;
+      IDataReader r = CreateDataReaderMock().Object;
       Assert.False(r.IsClosed);
       r.Close();
       Assert.True(r.IsClosed);
@@ -127,7 +113,7 @@ namespace Moq.DataReader.Tests
     [Fact]
     public void TestGetValues()
     {
-      DbDataReader r = CreateDataReaderMock(0).Object;
+      IDataReader r = CreateDataReaderMock(0).Object;
       Assert.True(r.Read());
       object[] values = new object[_expectedFieldNames.Length];
       int len = r.GetValues(values);
@@ -140,7 +126,7 @@ namespace Moq.DataReader.Tests
     [Fact]
     public void TestGets()
     {
-      DbDataReader r = CreateDataReaderMock(0, 1).Object;
+      IDataReader r = CreateDataReaderMock(0, 1).Object;
       for (int i = 0; i < 2; ++i)
       {
         Assert.True(r.Read());
@@ -170,7 +156,7 @@ namespace Moq.DataReader.Tests
     [Fact]
     public void TestIsDbNull()
     {
-      DbDataReader r = CreateDataReaderMock(1).Object;
+      IDataReader r = CreateDataReaderMock(1).Object;
       Assert.True(r.Read());
       Assert.True(r.IsDBNull(12));
       Assert.False(r.IsDBNull(0));
@@ -201,14 +187,14 @@ namespace Moq.DataReader.Tests
     }
 
     /// <summary>
-    /// Create an DbDataReader mock by cloning models from <see cref="_testModelsCollection"/>
+    /// Create an IDataReader mock by cloning models from <see cref="_testModelsCollection"/>
     /// </summary>
     /// <param name="indexes">Indexes of models in <see cref="_testModelsCollection"/></param>
     /// <returns></returns>
-    private Mock<DbDataReader> CreateDataReaderMock(params int[] indexes)
+    private Mock<IDataReader> CreateDataReaderMock(params int[] indexes)
     {
       List<TestModel> data = indexes.Select(i => (TestModel)_testModelsCollection[i].Clone()).ToList();
-      var mock = new Mock<DbDataReader>();
+      var mock = new Mock<IDataReader>();
       mock.SetupDataReader(data);
       return mock;
     }
